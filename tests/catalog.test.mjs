@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readCatalog,validateCatalog,validateFiles} from '../scripts/validate.mjs';
+import {categories,learningPaths} from '../src/core.js';
+const catalog=await readCatalog();
+test('Las 75 unidades tienen contenido, relaciones y ejemplos válidos',()=>{const result=validateCatalog(catalog);assert.equal(result.components,75);assert.ok(result.problems>=150);assert.ok(result.yamlDocuments>=50);});
+test('Todas las categorías están representadas',()=>{for(const category of categories)assert.ok(catalog.some(c=>c.category===category.id),category.id);});
+test('La ruta solo enlaza unidades existentes',()=>{const ids=new Set(catalog.map(c=>c.id));for(const path of learningPaths)for(const id of path.ids)assert.ok(ids.has(id),id);});
+test('Las fuentes son primarias y usan HTTPS',()=>{for(const c of catalog){const url=new URL(c.source.url);assert.equal(url.protocol,'https:');assert.ok(['kubernetes.io','gateway-api.sigs.k8s.io','github.com','coredns.io','etcd.io','containerd.io','cri-o.io'].some(domain=>url.hostname===domain||url.hostname.endsWith('.'+domain)),c.id+': '+url.hostname);}});
+test('Los recursos locales de HTML, CSS y módulos existen',async()=>{const result=await validateFiles();assert.ok(result.files>10);assert.ok(result.references>10);});
+test('La validación detecta referencias de componentes rotas',()=>{const damaged=structuredClone(catalog);damaged[0].related.push('no-existe');assert.throws(()=>validateCatalog(damaged),/relación desconocida/);});
+test('La validación rechaza un ejemplo YAML roto',()=>{const damaged=structuredClone(catalog);damaged.find(c=>c.format==='yaml').example='apiVersion: [\nkind: Pod';assert.throws(()=>validateCatalog(damaged),/YAML inválido/);});
+test('El catálogo identifica extensiones que requieren instalación',()=>{for(const id of ['gateway-api','gateway','httproute','volumesnapshot','vpa','operator'])assert.equal(catalog.find(c=>c.id===id).kind,'Extensión',id);});
