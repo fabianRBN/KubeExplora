@@ -4,7 +4,8 @@ import {icon,homeDiagram,componentDiagram,diagramCaption,replicasIllustration} f
 const main=document.querySelector('#main-content');
 const searchDialog=document.querySelector('#search-dialog');
 const searchInput=document.querySelector('#global-search');
-const state={catalog:[],map:new Map(),progress:readProgress(localStorage),category:'all',query:'',component:null,caseIndex:0,fault:false,step:-1,playing:false,zoom:1,pan:{x:0,y:0},inspected:null,lab:'replicas',replicas:3,usage:96,limit:128,selector:'web',crashFixed:false};
+let progressStorage;try{progressStorage=window.localStorage;}catch{}
+const state={catalog:[],map:new Map(),progress:readProgress(progressStorage),category:'all',query:'',component:null,caseIndex:0,fault:false,step:-1,playing:false,zoom:1,pan:{x:0,y:0},inspected:null,lab:'replicas',replicas:3,usage:96,limit:128,selector:'web',crashFixed:false};
 let flowTimer,homeTimer,toastTimer;
 const categoryName=id=>categories.find(c=>c.id===id)?.name||id;
 const href=id=>`#/componente/${encodeURIComponent(id)}`;
@@ -277,9 +278,14 @@ document.querySelector('[data-close-search]').addEventListener('click',()=>searc
 searchInput.addEventListener('input',updateSearch);
 searchInput.addEventListener('keydown',event=>{if(event.key==='Enter'){const first=document.querySelector('.search-results a');if(first){event.preventDefault();first.click();}}});
 document.querySelector('#menu-trigger').addEventListener('click',event=>{const open=document.querySelector('.header-nav').classList.toggle('open');event.currentTarget.setAttribute('aria-expanded',String(open));});
+document.querySelector('.skip-link').addEventListener('click',event=>{event.preventDefault();main.focus({preventScroll:true});main.scrollIntoView({block:'start'});});
 document.addEventListener('keydown',event=>{
   if(event.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)&&!document.querySelector('dialog[open]')){event.preventDefault();openSearch();}
-  if(event.key==='Escape')document.querySelector('.component-sidebar.open')?.classList.remove('open');
+  if(event.key==='Escape'){
+    const drawer=document.querySelector('.component-sidebar.open');
+    if(drawer){drawer.classList.remove('open');const trigger=document.querySelector('.mobile-components-button');trigger.setAttribute('aria-expanded','false');trigger.focus();}
+    const menu=document.querySelector('.header-nav.open');if(menu){menu.classList.remove('open');const trigger=document.querySelector('#menu-trigger');trigger.setAttribute('aria-expanded','false');trigger.focus();}
+  }
 });
 for(const dialog of [searchDialog,diagnosticDialog])dialog.addEventListener('click',event=>{if(event.target===dialog){const bounds=dialog.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)dialog.close();}});
 window.addEventListener('hashchange',()=>route());
