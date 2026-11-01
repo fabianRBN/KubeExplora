@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {searchComponents,memoryState,scheduleReplicas,serviceEndpoints,readProgress,escapeHTML,highlightCode} from '../src/core.js';
+import {readCatalog} from '../scripts/validate.mjs';
+const catalog=await readCatalog();
+test('La búsqueda ignora acentos y mayúsculas',()=>{assert.ok(searchComponents(catalog,'CLUSTER').some(c=>c.id==='cluster'));});
+test('La búsqueda encuentra un problema de producción',()=>{assert.ok(searchComponents(catalog,'CrashLoopBackOff').some(c=>c.id==='pod'));});
+test('El filtro de categoría se aplica junto a la búsqueda',()=>{assert.ok(searchComponents(catalog,'','red').every(c=>c.category==='red'));assert.equal(searchComponents(catalog,'textoquenuncaexiste').length,0);});
+test('El scheduler simulado distribuye capacidad y conserva el total',()=>{for(let replicas=1;replicas<=8;replicas++){const state=scheduleReplicas(replicas);assert.equal(state.ready+state.pending,replicas);assert.ok(state.allocation.every(n=>n<=3));}assert.equal(scheduleReplicas(8).pending,2);});
+test('Superar memoria difiere de alcanzar exactamente el límite',()=>{assert.equal(memoryState(128,128).failed,false);assert.equal(memoryState(144,128).failed,true);assert.equal(memoryState(256,128).ratio,1);});
+test('El Service selecciona labels y preparación, no solo nombre',()=>{const pods=[{labels:{app:'web'},ready:true},{labels:{app:'web'},ready:false},{labels:{app:'api'},ready:true}];assert.equal(serviceEndpoints({app:'web'},pods).length,1);assert.equal(serviceEndpoints({app:'missing'},pods).length,0);});
+test('El progreso corrupto o bloqueado no rompe la aplicación',()=>{assert.equal(readProgress({getItem:()=>'{bad'}).size,0);assert.equal(readProgress({getItem:()=>{throw Error();}}).size,0);assert.deepEqual([...readProgress({getItem:()=>'["pod",12,"node"]'})],['pod','node']);});
+test('El texto y el código se escapan antes de mostrarse',()=>{assert.equal(escapeHTML('<script>'),'&lt;script&gt;');assert.ok(!highlightCode('image: <script>').includes('<script>'));});

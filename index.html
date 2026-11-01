@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#2864f0">
+  <meta name="description" content="Entiende Kubernetes pieza por pieza. Explora su arquitectura, aprende sus componentes y resuelve escenarios reales de producción en un laboratorio visual.">
+  <meta property="og:title" content="KubeExplora · Kubernetes, pieza por pieza">
+  <meta property="og:description" content="Arquitectura interactiva, ejemplos y escenarios de producción para aprender Kubernetes.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <title>KubeExplora · Kubernetes, pieza por pieza</title>
+  <link rel="icon" href="assets/kubernetes.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="src/styles.css">
+  <script type="module" src="src/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Ir al contenido</a>
+  <header class="site-header">
+    <a class="brand" href="#/" aria-label="KubeExplora, inicio"><img src="assets/kubernetes.svg" alt="" width="42" height="42"><span>KubeExplora</span></a>
+    <nav class="header-nav" aria-label="Principal"><a href="#/explorar">Explorar</a><a href="#/ruta">Ruta de aprendizaje</a><a href="#/laboratorios">Laboratorios</a></nav>
+    <button class="search-trigger" id="search-trigger" aria-haspopup="dialog"><span class="search-symbol" aria-hidden="true"></span><span>Buscar un componente</span><kbd>/</kbd></button>
+    <button class="menu-trigger icon-button" id="menu-trigger" aria-label="Abrir menú" aria-expanded="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </header>
+  <main id="main-content" tabindex="-1"><div class="initial-loading" role="status">Preparando tu clúster de aprendizaje…</div></main>
+  <footer class="site-footer"><a class="footer-brand" href="#/">KubeExplora</a><p>Aprende, experimenta y conecta las piezas.</p><a href="https://github.com/fabianRBN/KubeExplora" target="_blank" rel="noopener noreferrer">Código y contribuciones ↗</a><span>Proyecto educativo independiente · <a href="credits.html">Créditos</a></span></footer>
+  <dialog id="search-dialog" aria-labelledby="search-title"><div class="search-dialog-head"><h2 id="search-title">Encuentra una pieza</h2><button class="icon-button" data-close-search aria-label="Cerrar búsqueda">×</button></div><label class="search-input-wrap"><span class="search-symbol" aria-hidden="true"></span><span class="sr-only">Buscar por nombre, concepto o problema</span><input id="global-search" type="search" autocomplete="off" placeholder="Pod, DNS, memoria, permisos…"></label><div id="search-results" class="search-results"></div><p class="search-hint">Busca componentes y problemas de producción. Esc para cerrar.</p></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><div class="noscript-notice">KubeExplora utiliza JavaScript para sus diagramas y simulaciones. Puedes consultar la <a href="https://kubernetes.io/docs/concepts/">documentación oficial de Kubernetes</a>.</div></noscript>
+</body>
+</html>
