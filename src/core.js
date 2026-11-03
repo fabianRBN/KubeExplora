@@ -16,7 +16,11 @@ export function searchComponents(catalog, query='', category='all') {
   const words=normalize(query).trim().split(/\s+/).filter(Boolean);
   return catalog.filter(component=>{
     if(category!=='all' && component.category!==category) return false;
-    const searchable=normalize([component.name,component.tagline,component.summary,component.category,...component.problems.map(p=>`${p.name} ${p.symptom} ${p.cause}`)].join(' '));
+    const searchable = normalize([
+      component.name, component.tagline, component.summary, component.category,
+      ...(component.properties ?? []).map(([name]) => name),
+      ...component.problems.map(problem => `${problem.name} ${problem.symptom} ${problem.cause}`)
+    ].join(' '));
     return words.every(word=>searchable.includes(word));
   });
 }
