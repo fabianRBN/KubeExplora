@@ -24,3 +24,90 @@ dialog{border:1px solid var(--border);border-radius:18px;background:white;paddin
 .ownership-arrow,.traffic-label,.pod-box small,.lab-selector button small,.lab-pod,.crash-board pre{font-size:11px}.production-grid{align-items:start}.practice-check::before{content:"";display:inline-block;width:6px;height:11px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(40deg)}
 .mini-object,.pod-volume,.pod-service-mini{font-size:11px}.graph-edge-index{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);background:#edf7ff;color:#365880;border:1px solid #a5c3ea;border-radius:50%;width:23px;height:23px;display:grid;place-items:center;font-size:12px;font-weight:800;z-index:1}.graph-edge-index.is-lit,.graph-relationships li.is-lit .relationship-index{background:var(--blue);color:white;border-color:var(--blue)}.graph-relationships{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:7px}.graph-relationships li{display:flex;align-items:start;gap:9px;padding:7px 9px;background:#f1f7ff;border-radius:7px}.relationship-index{display:grid;place-items:center;flex:none;width:22px;height:22px;border:1px solid #bed4f1;border-radius:50%;font-size:12px;color:#365880}.graph-relationships li>div{min-width:0}.graph-relationships strong{display:block;font-size:12px;font-weight:700;overflow-wrap:anywhere;line-height:1.4}.graph-relationships li>div>span{display:block;font-size:12px;color:var(--muted)}@media(max-width:650px){.graph-cluster-label{font-size:11px}.graph-edge-index{width:22px;height:22px;font-size:12px}.graph-relationships strong,.graph-relationships li>div>span{font-size:12px}}
 .replica-pod small{font-size:11px}#main-content:focus{outline:none}
+.section-tabs {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
+
+.concept-section p + p {
+  margin-top: 12px;
+}
+
+.lesson-reference {
+  margin-top: 24px;
+}
+
+.lesson-reference > p,
+.lesson-command > p {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.property-list,
+.lesson-commands {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.property-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.property-row dt,
+.property-row dd {
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.property-row dt span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.lesson-command {
+  border-top: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.lesson-command:last-child {
+  padding-bottom: 0;
+}
+
+.lesson-command h3,
+.problem-group-title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.lesson-command .code-block {
+  min-height: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.problem-group-title {
+  margin: 12px 0 6px;
+  color: var(--muted);
+}
+
+.issue-count {
+  flex: none;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 650px) {
+  .property-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}

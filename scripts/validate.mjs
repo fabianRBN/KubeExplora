@@ -16,7 +16,34 @@ export function validateCatalog(catalog){
     if(!categories.has(c.category))errors.push(`${c.id}: categoría no reconocida.`);
     if(c.steps?.length!==3||c.practices?.length<3||c.problems?.length<2)errors.push(`${c.id}: faltan pasos, prácticas o problemas.`);
     for(const step of c.steps||[])if(!step.title||!step.description)errors.push(`${c.id}: paso incompleto.`);
-    for(const p of c.problems||[])for(const field of ['id','name','symptom','cause','fix','command'])if(!p[field])errors.push(`${c.id}: problema incompleto (${field}).`);
+    const hasText = value => typeof value === 'string' && value.trim().length > 0;
+    if (!Array.isArray(c.details) || c.details.length < 2 || !c.details.every(hasText)) {
+      errors.push(`${c.id}: falta la descripción ampliada.`);
+    }
+    for (const [field, minimum] of [['properties', 4], ['commands', 2]]) {
+      const entries = c[field];
+      if (!Array.isArray(entries) || entries.length < minimum ||
+          !entries.every(entry => Array.isArray(entry) && entry.length === 3 && entry.every(hasText))) {
+        errors.push(`${c.id}: ${field} incompletos.`);
+      }
+    }
+    const problems = c.problems || [];
+    if (problems.filter(problem => problem.diagnosticOnly === true).length < 3 ||
+        problems.filter(problem => !problem.diagnosticOnly).length < 2) {
+      errors.push(`${c.id}: faltan simulaciones o guías de diagnóstico.`);
+    }
+    if (new Set(problems.map(problem => problem.id)).size !== problems.length) {
+      errors.push(`${c.id}: identificador de problema duplicado.`);
+    }
+    for (const problem of problems) {
+      for (const field of ['id', 'name', 'symptom', 'cause', 'fix', 'command']) {
+        if (!hasText(problem[field])) errors.push(`${c.id}: problema incompleto (${field}).`);
+      }
+      if (problem.source && (!hasText(problem.source.title) ||
+          !URL.canParse(problem.source.url) || new URL(problem.source.url).protocol !== 'https:')) {
+        errors.push(`${c.id}: fuente de incidente inválida.`);
+      }
+    }
     if(!c.source?.url?.startsWith('https://'))errors.push(`${c.id}: fuente inválida.`);
     for(const id of c.related||[])if(!ids.has(id))errors.push(`${c.id}: relación desconocida ${id}.`);
     const nodes=new Set();

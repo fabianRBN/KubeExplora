@@ -8,7 +8,8 @@ Kubernetes, pieza por pieza. Aplicación educativa en español con arquitectura 
 
 - 75 unidades: fundamentos, arquitectura, cargas de trabajo, redes, almacenamiento, configuración, seguridad, operación y extensiones.
 - Diagramas con objetos seleccionables, relaciones explicadas y recorridos animados. Las preferencias de movimiento reducido se respetan.
-- 152 problemas de producción con síntomas, causas posibles, investigación y comandos de referencia.
+- Descripción ampliada, propiedades clave y comandos con orientación para interpretar sus resultados.
+- Simulaciones y guías de diagnóstico con síntomas, causas posibles y comandos. Los incidentes documentados incluyen el enlace al informe original.
 - Ejemplos YAML o shell, recomendaciones y enlaces a documentación oficial en cada unidad.
 - Cuatro laboratorios: capacidad de réplicas, memoria, selectores de Service y CrashLoopBackOff.
 - Ruta de aprendizaje y progreso guardado en el navegador, búsqueda por componente o problema y diseño adaptable.
